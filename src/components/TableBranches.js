@@ -21,13 +21,6 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { visuallyHidden } from "@mui/utils";
-import { createClient } from "@supabase/supabase-js";
-
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6dW91a3Rsc3ZreWlkdmd4eGptIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTIzODY3ODUsImV4cCI6MTk2Nzk2Mjc4NX0.LPOVOLtutfN9eoSg9gEarHY-T7WTXWVQahwTF3MmiA8";
-const SUPABASE_URL = "https://jzuouktlsvkyidvgxxjm.supabase.co";
-
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -186,14 +179,14 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable(props) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows] = React.useState([]);
+  const rows = props.rows;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -248,15 +241,6 @@ export default function EnhancedTable() {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  React.useEffect(() => {
-    supabaseClient
-      .from("filiais")
-      .select("*")
-      .then(({ data }) => {
-        setRows(data);
-      });
-  });
 
   return (
     <Box my={3} sx={{ width: "100%" }}>
