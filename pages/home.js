@@ -41,6 +41,7 @@ export default function HomePage() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [branchName, setBranchName] = React.useState("");
   const [branchCity, setBranchCity] = React.useState("");
+  const [selected, setSelected] = React.useState([]);
   const [disable, setDisable] = React.useState(true);
   const [rows, setRows] = React.useState([]);
 
@@ -71,6 +72,9 @@ export default function HomePage() {
     supabaseClient.from("filiais").insert([branch]).then();
     handleClose;
   }
+  // function handleRemoveBranch() {
+  //   supabaseClient.from("filiais").delete().match({ id: 19 });
+  // }
 
   const handleClose = () => {
     setBranchName("");
@@ -127,7 +131,15 @@ export default function HomePage() {
                 </Button>
               </Grid>
             </Grid>
-            <Table rows={rows} />
+            <Table
+              rows={rows}
+              select={(id) => {
+                setSelected(id);
+              }}
+              // remove={() => {
+              //   handleRemoveBranch();
+              // }}
+            />
           </Container>
         </Navigator>
       </Box>
