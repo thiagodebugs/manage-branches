@@ -44,24 +44,24 @@ export default function HomePage() {
   const [disable, setDisable] = React.useState(true);
   const [rows, setRows] = React.useState([]);
 
-  if (!user) {
-    React.useEffect(() => {
-      roteamento.push("/");
-    });
-    return (
-      <Box
-        sx={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress color="success" />
-      </Box>
-    );
-  }
+  // if (!user) {
+  //   React.useEffect(() => {
+  //     roteamento.push("/");
+  //   });
+  //   return (
+  //     <Box
+  //       sx={{
+  //         width: "100vw",
+  //         height: "100vh",
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //       }}
+  //     >
+  //       <CircularProgress color="success" />
+  //     </Box>
+  //   );
+  // }
 
   function handleNewBranch() {
     const branch = {
@@ -69,15 +69,6 @@ export default function HomePage() {
       city: branchCity,
     };
     supabaseClient.from("filiais").insert([branch]).then();
-    handleClose;
-  }
-
-  function handleRemoveBranch() {
-    const branch = {
-      name: branchName,
-      city: branchCity,
-    };
-    supabaseClient.from("filiais").delete([branch]).then();
     handleClose;
   }
 
