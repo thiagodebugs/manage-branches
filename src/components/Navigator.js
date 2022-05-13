@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -14,7 +15,13 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { Menu, ChevronLeft, ChevronRight, Home } from "@mui/icons-material";
+import {
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  Group,
+} from "@mui/icons-material";
 import Profile from "./Profile";
 
 const drawerWidth = 240;
@@ -87,6 +94,7 @@ const Drawer = styled(MuiDrawer, {
 // -----------------------------------------------------------------
 
 export default function Navigator(props) {
+  const roteamento = useRouter();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -165,17 +173,43 @@ export default function Navigator(props) {
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              onClick={() => {
+                roteamento.push("/home");
+              }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: open ? 3 : "auto",
+                  mr: open ? 2 : "auto",
                   justifyContent: "center",
                 }}
               >
                 <Home />
               </ListItemIcon>
               <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key="Users" disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+              onClick={() => {
+                roteamento.push("/users");
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 2 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <Group />
+              </ListItemIcon>
+              <ListItemText primary="Usuários" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
         </List>

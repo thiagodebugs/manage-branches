@@ -7,16 +7,22 @@ import {
   Button,
   Grid,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import Navigator from "../src/components/Navigator";
 import Search from "../src/components/Search";
-import Table from "../src/components/Table";
-import { AddCircle, Delete } from "@mui/icons-material";
+import Table from "../src/components/TableBranches";
+import { AddCircle } from "@mui/icons-material";
 
 export default function HomePage() {
   const roteamento = useRouter();
   const user = roteamento.query.user;
+
   if (!user) {
     React.useEffect(() => {
       roteamento.push("/");
@@ -35,6 +41,16 @@ export default function HomePage() {
       </Box>
     );
   } else {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+    const handleToggle = () => {
+      setOpen(!open);
+    };
+
     return (
       <>
         <Box sx={{ display: "flex" }}>
@@ -59,6 +75,7 @@ export default function HomePage() {
                     variant="contained"
                     color="success"
                     startIcon={<AddCircle />}
+                    onClick={handleToggle}
                   >
                     ADICIONAR
                   </Button>
@@ -68,6 +85,45 @@ export default function HomePage() {
             </Container>
           </Navigator>
         </Box>
+        <Dialog maxWidth="md" open={open} onClose={handleClose}>
+          <DialogTitle>{"SOBRE"}</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <TextField
+                  fullWidth
+                  type="text"
+                  variant="standard"
+                  color="success"
+                  label="Nome (Apelido) *"
+                  sx={{ minWidth: "30vw" }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  fullWidth
+                  type="text"
+                  variant="standard"
+                  color="success"
+                  label="Cidade *"
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              autoFocus
+              variant="contained"
+              color="success"
+              onClick={handleClose}
+            >
+              SALVAR
+            </Button>
+            <Button variant="contained" color="inherit" onClick={handleClose}>
+              CANCELAR
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
     );
   }

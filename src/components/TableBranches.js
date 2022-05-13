@@ -21,32 +21,13 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { visuallyHidden } from "@mui/utils";
+import { createClient } from "@supabase/supabase-js";
 
-function createData(name, city) {
-  return {
-    name,
-    city,
-  };
-}
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6dW91a3Rsc3ZreWlkdmd4eGptIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTIzODY3ODUsImV4cCI6MTk2Nzk2Mjc4NX0.LPOVOLtutfN9eoSg9gEarHY-T7WTXWVQahwTF3MmiA8";
+const SUPABASE_URL = "https://jzuouktlsvkyidvgxxjm.supabase.co";
 
-const rows = [
-  createData("Filial 01", "Sinop", "Mato Grosso", 13, "Jãozinho"),
-  createData("Filial 02", "Sorriso"),
-  createData("Filial 03", "Nova Mutum"),
-  createData("Filial 04", "Cuiabá"),
-  createData("Filial 05", "Alta Floresta"),
-  createData("Filial 06", "Guarantã"),
-  createData("Filial 07", "Matupa"),
-  createData("Filial 08", "Belém"),
-  createData("Filial 09", "Santarém"),
-  createData("Filial 10", "Recife"),
-  createData("Filial 11", "São Paulo"),
-  createData("Filial 12", "Lucas do Rio Verde"),
-  createData("Filial 13", "Rio de Janeiro"),
-  createData("Filial 14", "Curitiba"),
-  createData("Filial 15", "Porto Alegre"),
-  createData("Filial 16", "Primavera"),
-];
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -207,11 +188,12 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
+  const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rows, setRows] = React.useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -266,6 +248,15 @@ export default function EnhancedTable() {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  React.useEffect(() => {
+    supabaseClient
+      .from("filiais")
+      .select("*")
+      .then(({ data }) => {
+        setRows(data);
+      });
+  });
 
   return (
     <Box my={3} sx={{ width: "100%" }}>
@@ -363,7 +354,7 @@ export default function EnhancedTable() {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Comprimir"
       />
     </Box>
   );
